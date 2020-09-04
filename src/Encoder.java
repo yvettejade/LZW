@@ -25,13 +25,13 @@ public class Encoder {
 	{
 		BufferedReader br = new BufferedReader(new FileReader ("file.txt"));
 		PrintWriter pw = new PrintWriter ("output.txt");
-		table = fillInAsciiValues();
+		this.table = fillInAsciiValues();
 		String word = "";
 		int index=128;
 		while (br.ready())
 		{
 			word+=br.read();
-			while (map.get(word)!=null)
+			while (table.get(word)!=null)
 			{
 				word+=br.read();
 			}
