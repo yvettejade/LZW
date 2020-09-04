@@ -16,7 +16,7 @@ public class Encoder {
 		}
 	}
 
-	public void Encoder()
+	public void encode()
 	{
 		BufferedReader br = new BufferedReader(new FileReader ("file.txt"));
 		PrintWriter pw = new PrintWriter ("output.txt");
