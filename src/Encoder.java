@@ -1,11 +1,12 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.util.*;
-private HashMap<String, Integer> table;
-public class Encoder {
 
+public class Encoder {
+	private HashMap<String, Integer> table;
 	public Encoder()
 	{
 		
@@ -20,7 +21,7 @@ public class Encoder {
 		return table;
 	}
 
-	public void encode()
+	public void encode() throws IOException
 	{
 		BufferedReader br = new BufferedReader(new FileReader ("file.txt"));
 		PrintWriter pw = new PrintWriter ("output.txt");
@@ -34,8 +35,8 @@ public class Encoder {
 			{
 				word+=br.read();
 			}
-			map.put(word, index++);
-			pw.print(map.get(word.length()-2));
+			table.put(word, index++);
+			pw.print(table.get(word.length()-2));
 		}
 	}
 
