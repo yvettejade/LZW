@@ -16,33 +16,33 @@ public class Encoder {
 	{
 		for (int i = 0; i < 128; i++)
 		{
-			table.put((char)i+"", i);
+			tableOfCodes.put((char)i+"", i);
 		}
-		return table;
+		return tableOfCodes;
 	}
 
 	public void encode(String inputFile) throws IOException
 	{
 		BufferedReader br = new BufferedReader(new FileReader (inputFile));
 		PrintWriter pw = new PrintWriter ("encodedFile.txt");
-		this.table = fillInAsciiValues();
+		this.tableOfCodes = fillInAsciiValues();
 		String word = "";
 		int index=128;
 		while (br.ready())
 		{
 			word+=br.read();
-			while (table.get(word)!=null)
+			while (tableOfCodes.get(word)!=null)
 			{
 				word+=br.read();
 			}
-			if (table.size()>2000)
+			if (tableOfCodes.size()>2000)
 			{
-				pw.print(table.get(word.length()-2));
+				pw.print(tableOfCodes.get(word.length()-2));
 			}
 			else
 			{
-			table.put(word, index++);
-			pw.print(table.get(word.length()-2));
+			tableOfCodes.put(word, index++);
+			pw.print(tableOfCodes.get(word.length()-2));
 			}
 		}
 
