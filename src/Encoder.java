@@ -15,7 +15,7 @@ public class Encoder {
 	{
 		for (int i = 0; i < 128; i++)
 		{
-			tableOfCodes.put((char)i+"", i);
+			tableOfCodes.put(Character.toString((char)i), i);
 		}
 		return tableOfCodes;
 	}
