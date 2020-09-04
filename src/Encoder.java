@@ -6,7 +6,7 @@ import java.lang.reflect.Array;
 import java.util.*;
 
 public class Encoder {
-	private HashMap<String, Integer> table;
+	private HashMap<String, Integer> tableOfCodes;
 	public Encoder()
 	{
 
