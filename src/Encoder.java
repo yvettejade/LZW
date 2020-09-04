@@ -35,7 +35,7 @@ public class Encoder {
 			{
 				word+=br.read();
 			}
-			if (table.size()>350)
+			if (table.size()>2000)
 			{
 				pw.print(table.get(word.length()-2));
 			}
