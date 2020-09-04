@@ -2,11 +2,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Encoder {
-	private HashMap<String, Integer> tableOfCodes;
+	private HashMap<String, Integer>tableOfCodes;
 	public Encoder()
 	{
 
@@ -21,6 +20,7 @@ public class Encoder {
 		return tableOfCodes;
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	public void encode(String inputFile) throws IOException
 	{
 		BufferedReader br = new BufferedReader(new FileReader (inputFile));
@@ -45,6 +45,8 @@ public class Encoder {
 			pw.print(tableOfCodes.get(word.length()-2));
 			}
 		}
+		br.close();
+		pw.close();
 
 	}
 
