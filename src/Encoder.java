@@ -21,9 +21,9 @@ public class Encoder {
 		return table;
 	}
 
-	public void encode() throws IOException
+	public void encode(String inputFile) throws IOException
 	{
-		BufferedReader br = new BufferedReader(new FileReader ("file.txt"));
+		BufferedReader br = new BufferedReader(new FileReader (inputFile));
 		PrintWriter pw = new PrintWriter ("encodedFile.txt");
 		this.table = fillInAsciiValues();
 		String word = "";
@@ -37,6 +37,11 @@ public class Encoder {
 			}
 			table.put(word, index++);
 			pw.print(table.get(word.length()-2));
+		}
+		if (table.size()>350)
+		{
+			br.close();
+			pw.close();
 		}
 	}
 
