@@ -24,7 +24,7 @@ public class Encoder {
 	public void encode() throws IOException
 	{
 		BufferedReader br = new BufferedReader(new FileReader ("file.txt"));
-		PrintWriter pw = new PrintWriter ("output.txt");
+		PrintWriter pw = new PrintWriter ("encodedFile.txt");
 		this.table = fillInAsciiValues();
 		String word = "";
 		int index=128;
