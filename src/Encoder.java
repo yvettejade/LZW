@@ -9,7 +9,7 @@ public class Encoder {
 	private HashMap<String, Integer> table;
 	public Encoder()
 	{
-		
+
 	}
 	//fills in hashmap with initial characters and corresponding number values from ascii chart
 	public HashMap<String, Integer> fillInAsciiValues()
@@ -35,14 +35,17 @@ public class Encoder {
 			{
 				word+=br.read();
 			}
+			if (table.size()>350)
+			{
+				pw.print(table.get(word.length()-2));
+			}
+			else
+			{
 			table.put(word, index++);
 			pw.print(table.get(word.length()-2));
+			}
 		}
-		if (table.size()>350)
-		{
-			br.close();
-			pw.close();
-		}
+
 	}
 
 }
