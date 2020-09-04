@@ -13,12 +13,11 @@ public class Encoder {
 	//fills in hashmap with initial characters and corresponding number values from ascii chart
 	public HashMap<String, Integer> fillInAsciiValues()
 	{
-		HashMap <String, Integer> map = new HashMap<String, Integer>();
 		for (int i = 0; i < 128; i++)
 		{
-			map.put((char)i+"", i);
+			table.put((char)i+"", i);
 		}
-		return map;
+		return table;
 	}
 
 	public void encode()
