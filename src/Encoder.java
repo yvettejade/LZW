@@ -27,22 +27,27 @@ public class Encoder {
 		PrintWriter pw = new PrintWriter ("encodedFile.txt");
 		this.tableOfCodes = fillInAsciiValues();
 		String currentChars = "";
-		Integer index=128;
+		Integer index=127;
 		while (br.ready())
 		{
-			currentChars+=br.read();
+			currentChars+=(char)br.read();
 			while (tableOfCodes.get(currentChars)!=null)
 			{
-				currentChars+=br.read();
+				currentChars+=(char)br.read();
 			}
 			if (tableOfCodes.size()>2000)
 			{
-				pw.print(tableOfCodes.get(currentChars));
+				String key = currentChars.substring(0, currentChars.length()-1);
+				pw.print(tableOfCodes.get(key));
+				currentChars=currentChars.substring(currentChars.length()-1);
 			}
 			else
 			{
-			tableOfCodes.put(currentChars, index++);
-			pw.print(tableOfCodes.get(currentChars));
+			String key = currentChars.substring(0,currentChars.length()-1);
+			index++;
+			tableOfCodes.put(currentChars, index);
+			pw.print(tableOfCodes.get(key));
+			currentChars=currentChars.substring(currentChars.length()-1);
 			}
 		}
 		br.close();
