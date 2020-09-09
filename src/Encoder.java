@@ -31,6 +31,7 @@ public class Encoder {
 		while (br.ready())
 		{
 			currentChars+=(char)br.read();
+			//generates a string that isn't a key in tableOfCodes yet
 			while (tableOfCodes.get(currentChars)!=null)
 			{
 				currentChars+=(char)br.read();
@@ -41,6 +42,9 @@ public class Encoder {
 				pw.print(tableOfCodes.get(key));
 				currentChars=currentChars.substring(currentChars.length()-1);
 			}
+			//adds new key and value to tableOfCodes
+			//prints the Integer value that corresponds to the latest recognizable key
+			//resets currentChars to start with its last letter
 			else
 			{
 				String key = currentChars.substring(0,currentChars.length()-1);
