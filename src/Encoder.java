@@ -10,7 +10,7 @@ public class Encoder {
 	{
 
 	}
-	//fills in hashmap with initial characters and corresponding number values from ascii chart
+	//fills in hashmap with initial characters and corresponding number values from ascii chart(0-127)
 	public HashMap<String, Integer> fillInAsciiValues()
 	{
 		tableOfCodes = new HashMap<String, Integer>();
@@ -43,11 +43,11 @@ public class Encoder {
 			}
 			else
 			{
-			String key = currentChars.substring(0,currentChars.length()-1);
-			index++;
-			tableOfCodes.put(currentChars, index);
-			pw.print(tableOfCodes.get(key));
-			currentChars=currentChars.substring(currentChars.length()-1);
+				String key = currentChars.substring(0,currentChars.length()-1);
+				index++;
+				tableOfCodes.put(currentChars, index);
+				pw.print(tableOfCodes.get(key));
+				currentChars=currentChars.substring(currentChars.length()-1);
 			}
 		}
 		br.close();
