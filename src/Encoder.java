@@ -6,6 +6,7 @@ import java.util.*;
 
 public class Encoder {
 	private HashMap<String, Integer> tableOfCodes;
+	//constructs Encoder
 	public Encoder()
 	{
 
@@ -25,8 +26,9 @@ public class Encoder {
 	{
 		BufferedReader br = new BufferedReader(new FileReader (inputFile));
 		PrintWriter pw = new PrintWriter ("encodedFile.txt");
-		this.tableOfCodes = fillInAsciiValues();
-		String currentChars = "";
+		//fills in hashmap with initial characters from method above
+		this.tableOfCodes = fillInAsciiValues(); 
+		String currentChars = ""; 
 		Integer index=127;
 		while (br.ready())
 		{
@@ -35,7 +37,8 @@ public class Encoder {
 			{
 				currentChars+=(char)br.read();
 			}
-			if (tableOfCodes.size()>2000)
+			//if the size of the hashmap exceeds 2000, values will no longer be added to the table 
+			if (tableOfCodes.size()>2000) 
 			{
 				String key = currentChars.substring(0, currentChars.length()-1);
 				pw.print(tableOfCodes.get(key));
@@ -43,11 +46,11 @@ public class Encoder {
 			}
 			else
 			{
-				String key = currentChars.substring(0,currentChars.length()-1);
+				String key = currentChars.substring(0,currentChars.length()-1); 
 				index++;
-				tableOfCodes.put(currentChars, index);
+				tableOfCodes.put(currentChars, index); 
 				pw.print(tableOfCodes.get(key));
-				currentChars=currentChars.substring(currentChars.length()-1);
+				currentChars=currentChars.substring(currentChars.length()-1); 
 			}
 		}
 		br.close();
