@@ -43,11 +43,11 @@ public class Encoder {
 			}
 			else
 			{
-			String key = currentChars.substring(0,currentChars.length()-1);
-			index++;
-			tableOfCodes.put(currentChars, index);
-			pw.print(tableOfCodes.get(key));
-			currentChars=currentChars.substring(currentChars.length()-1);
+				String key = currentChars.substring(0,currentChars.length()-1);
+				index++;
+				tableOfCodes.put(currentChars, index);
+				pw.print(tableOfCodes.get(key));
+				currentChars=currentChars.substring(currentChars.length()-1);
 			}
 		}
 		br.close();
