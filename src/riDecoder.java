@@ -9,7 +9,7 @@ import java.util.*;
 	the decoder sometimes skips the " m" and just goes straight to the " my" so the table replacements are in a different order
 	thus the decoding and encoding tables are different, changing the decoding
 */
-	
+// data type for the priority queue, holds the time seen + the char version of the word
 class Pair1
 {
 	private int times;
@@ -31,9 +31,10 @@ class Pair1
 
 public class riDecoder 
 {
+	// since we have a custom class, we need a custom sort function
+	// sorts by order seen (least recently seen at the front)
 	static Comparator<Pair1> pair1Comparator = new Comparator<Pair1>() 
 	{
-        //@Override
         public int compare(Pair1 one, Pair1 two) 
 		{
 	        return one.getTimes() - two.getTimes();
@@ -50,6 +51,7 @@ public class riDecoder
     // priorityQueue holding the recent-ness of the char + the char
 	static PriorityQueue<Pair1> pq = new PriorityQueue<>(pair1Comparator);
 
+	// always holds the most recent time seen
 	static HashMap<String, Integer> latest = new HashMap<String, Integer>();
 
 	public riDecoder () 
@@ -60,7 +62,9 @@ public class riDecoder
 		 	In order to work with Lily and Isa's encoder, it can only init up to 128
 		 */
 		for (int i = 0; i < 128; i++) 
-		{ //creates table of characters
+		{ 
+			// add inits to the priorityQueue
+			// we REALLY don't want to get rid of the inits bc it's inconvenient, so set them to the max int, so they never get hit
 			codeTable.put(i, (char)(i) + "");
 			pq.add(new Pair1(MAX, (char)(i)));
 			latest.put((char)(i)+"", MAX);
@@ -86,7 +90,6 @@ public class riDecoder
 			Missing the first char of the previous block, used for the special case when LZW doesn't work + adding to the table
 		*/
 		String prevChar = "";
-		//System.out.println((char)currentValue+"-"+previous);
 		String currentString = "";
 		/*
 			EDIT 4:
@@ -104,13 +107,9 @@ public class riDecoder
 			// if combination exists 
 			if (codeTable.containsKey(currentValue))
 			{ 
-				if (index == 355)
-				{
-					//System.out.println(codeTable);
-					//System.out.println("place: "+place+" currentValue: "+currentValue+" add: "+codeTable.get(currentValue));
-				}
 				currentString = codeTable.get(currentValue);
-				String toAdd = previous+"" + currentString.charAt(0);// previous combination + first letter of the one just read
+				// previous combination + first letter of the one just read
+				String toAdd = previous+"" + currentString.charAt(0);
 				/*
 					EDIT 5: 
 					Should never occur, but just to be safe
@@ -119,18 +118,16 @@ public class riDecoder
 				
 				decoded.append(currentString);
 
+				// add to the table + update the pq + latest
 				codeTable.put(place, toAdd);
 				latest.put(toAdd, counter);
 				pq.add(new Pair1(counter, (char)place));
 				counter++;
 
-				//////////////////////////////////////////////////////////////////
-				// table already contains it, so don't change that
+				// ignore any inits
 				// update the latest and add to the priority queue
-
 				if(currentValue >= 128)
 				{
-					//System.out.println(num+ " "+ current);
 					latest.replace(codeTable.get(currentValue), counter);
 					pq.add(new Pair1(counter, (char)currentValue));
 					counter++;
@@ -139,15 +136,12 @@ public class riDecoder
 			}
 			else //error isn't here
 			{
-				//System.out.println("ahh");
 				/*
 					need to use prevChar to constructed the missing word
 				*/
 				currentString = previous + prevChar;
-				//currentString = previous + previous.charAt(0);
-				/* 
-					max should be 65536 bc in utf - 8 1 char is maxxed at 65536, but bc of some weird utf rule, we're capped at 55296
-				*/
+				
+				// put the new code into the table + update pq + latest
 				codeTable.put(place, currentString);
 				latest.put(currentString, counter);
 				pq.add(new Pair1(counter, (char)place));
@@ -163,51 +157,30 @@ public class riDecoder
 			previous=codeTable.get(currentValue);
 
 
-			//if(codeTable.size()==254)
-			//System.out.println(latest);
-
-			if(codeTable.size()>=55296) //index >= 256-1 //55296
+			/* 
+				max should be 65536 bc in utf - 8 1 char is maxxed at 65536, but bc of some weird utf rule, we're capped at 55296
+			*/
+			// the table is full, need to clear a spot for the next round
+			if(codeTable.size()>=55296)
 			{
+				// run through everything in the pq until you hit something that matches the latest time we've seen that string (and isn't initialized)
+				// ie if the last time we've seen "ab" is 10, and we run into "ab", 5, ignore it bc it's not the most updated
 				Pair1 x = pq.poll();
-				//System.out.println((int)x.getWord()+ " "+x.getTimes()+ " "+codeTable.get((int)x.getWord()));
 
-				//!codeTable.containsKey((int)x.getWord()) || !latest.containsKey(codeTable.get((int)x.getWord())) ||
 				while(!codeTable.containsKey((int)x.getWord()) || !latest.containsKey(codeTable.get((int)x.getWord())) || latest.get(codeTable.get((int)x.getWord())) != x.getTimes() || (int)x.getWord() < 128)
 				{
 					x = pq.poll();
-					//System.out.println((int)x.getWord()+ " "+x.getTimes()+ " "+codeTable.get((int)x.getWord()));
 				}
 
-				//System.out.println((int)x.getWord());
-				if((int)x.getWord()==227) //133
-				{
-					//System.out.println(latest);
-					//System.out.println("ahh: "+codeTable.get((int)x.getWord()));
-					//System.out.println(codeTable);
-				}
-				//System.out.println(pq.size());
-
+				// clear everything, set place
 				latest.remove(codeTable.get((int)x.getWord()));
-				//System.out.println(latest.size());
-
-				//System.out.println("to remove: "+table.get((int)prev)+" "+prevChar);
-
-
 				codeTable.remove((int)x.getWord());
 				place = (int)x.getWord()-1;
 			}
 			index++;
 			place++;
 			
-			//if(index == 355)
-				//{}
-			
 		}
-		//System.out.println(codeTable.size());
-		//System.out.println(codeTable);
-
-		//System.out.println(index);
-
 		bw.write(decoded.toString());
 		br.close();
 		bw.close();
